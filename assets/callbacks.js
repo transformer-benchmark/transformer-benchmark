@@ -31,9 +31,9 @@ window.dash_clientside.clientside = {
             }
             xs = xs.map(x => Number(x)).sort((a, b) => a-b)
             ys = xs.map(x => epoch_data[x][metric])
-            run_name = run['model'].split('-')[0] + ' @' + run['image resolution (pretraining)']
-            if (run['image resolution (pretraining)'] != run['image resolution (finetuning)']) {
-                run_name += '->' + run['image resolution (finetuning)']
+            run_name = run['model'].split('-')[0] + ' @' + run['image resolution (pretraining) [px]']
+            if (run['image resolution (pretraining) [px]'] != run['image resolution (finetuning) [px]']) {
+                run_name += '->' + run['image resolution (finetuning) [px]']
             }
             is_highlight = (run['model'] == highlight_data[0] && run['run name'] == highlight_data[1] && run['run date'] == highlight_data[2])
             linestyle = (is_highlight) ? {'dash': 'dot'} : {}
@@ -65,9 +65,9 @@ window.dash_clientside.clientside = {
         for (var run in filtered_runs) {
             run = filtered_runs[run]
             model = run['model']
-            hovertext = model.split('-')[0] + ' @' + run['image resolution (pretraining)']
-            if (run['image resolution (pretraining)'] != run['image resolution (finetuning)']) {
-                hovertext += '->' + run['image resolution (finetuning)']
+            hovertext = model.split('-')[0] + ' @' + run['image resolution (pretraining) [px]']
+            if (run['image resolution (pretraining) [px]'] != run['image resolution (finetuning) [px]']) {
+                hovertext += '->' + run['image resolution (finetuning) [px]']
             }
             marker = 'circle'
             group = model
@@ -163,8 +163,8 @@ window.dash_clientside.clientside = {
 
     default_conditional_styling: function () {
         return [
-            {'if': {'column_id': 'image resolution (pretraining)', 'filter_query': '{image resolution (pretraining)} != 224'}, 'fontWeight': 'bold', 'color': 'tomato'},
-            {'if': {'column_id': 'image resolution (finetuning)', 'filter_query': '{image resolution (finetuning)} != 224'}, 'fontWeight': 'bold', 'color': 'tomato'},
+            {'if': {'column_id': 'image resolution (pretraining) [px]', 'filter_query': '{image resolution (pretraining) [px]} != 224'}, 'fontWeight': 'bold', 'color': 'tomato'},
+            {'if': {'column_id': 'image resolution (finetuning) [px]', 'filter_query': '{image resolution (finetuning) [px]} != 224'}, 'fontWeight': 'bold', 'color': 'tomato'},
             {'if': {'column_id': 'GPUS (pretraining)', 'filter_query': '{GPUS (pretraining)} != 4'}, 'fontWeight': 'bold', 'color': 'tomato'},
             {'if': {'column_id': 'GPUS (finetuning)', 'filter_query': '{GPUS (finetuning)} != 4'}, 'fontWeight': 'bold', 'color': 'tomato'},
             {'if': {'column_id': 'dataloader workers (pretraining)', 'filter_query': '{dataloader workers (pretraining)} != 44'}, 'fontWeight': 'bold', 'color': 'tomato'},
@@ -177,18 +177,18 @@ window.dash_clientside.clientside = {
     },
 
     picker_options: function (per_epoch) {
-        point_metrics = ['image resolution (pretraining)', 'GPUS (pretraining)', 'lr (pretraining)',
-                 'image resolution (finetuning)', 'GPUs (finetuning)', 'lr (finetuning)',
-                 'inference VRAM @32', 'inference VRAM @128', 'inference VRAM @1', 'inference VRAM @64',
-                 'total finetuning time', 'total validation time', 'throughput', 'throughput batch size',
-                 'training VRAM', 'training VRAM (single GPU)', 'number of parameters', 'FLOPs',
+        point_metrics = ['image resolution (pretraining) [px]', 'GPUS (pretraining)', 'lr (pretraining)',
+                 'image resolution (finetuning) [px]', 'GPUs (finetuning)', 'lr (finetuning)',
+                 'inference VRAM @32 [GB]', 'inference VRAM @128 [GB]', 'inference VRAM @1 [GB]', 'inference VRAM @64 [GB]',
+                 'total finetuning time [h*GPUs]', 'total validation time [h*GPUs]', 'throughput [ims/s]', 'throughput batch size [ims]',
+                 'training VRAM [GB]', 'training VRAM (single GPU) [GB]', 'number of parameters [Millions]', 'GFLOPs',
                  'validation loss', 'training loss', 'top-5 validation accuracy', 'top-5 training accuracy',
                  'top-1 validation accuracy', 'top-1 training accuracy']
 
-        per_epoch_metrics = ['gradient norm (max)', 'learning rate', 'training time per epoch', 'validation loss',
+        per_epoch_metrics = ['gradient norm (max)', 'learning rate', 'training time per epoch [h*GPUs]', 'validation loss',
             'training loss', 'top-5 validation accuracy', 'gradient norm (infinities)',
-            'gradient norm (80-th percentile)', 'validation time per epoch', 'gradient norm (mean)',
-            'training time (total)', 'validation time (total)', 'gradient norm (20-th percentile)',
+            'gradient norm (80-th percentile)', 'validation time per epoch [h*GPUs]', 'gradient norm (mean)',
+            'training time (total) [h*GPUs]', 'validation time (total) [h*GPUs]', 'gradient norm (20-th percentile)',
             'top-5 training accuracy', 'top-1 training accuracy', 'top-1 validation accuracy',
         ]
 
@@ -197,7 +197,7 @@ window.dash_clientside.clientside = {
             return [['epoch'], 'epoch', per_epoch_metrics, 'top-1 validation accuracy']
         }
         point_metrics = point_metrics.sort((a, b) => a.localeCompare(b))
-        return [point_metrics, 'throughput', point_metrics, 'top-1 validation accuracy']
+        return [point_metrics, 'throughput [ims/s]', point_metrics, 'top-1 validation accuracy']
     },
 
     buttons_enabled: function(pareto_on, per_epoch) {
