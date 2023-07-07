@@ -131,7 +131,6 @@ window.dash_clientside.clientside = {
                 pareto_points.unshift([x_min, pareto_min])
                 pareto_points.push([pareto_right, y_max])
             }
-            console.log(pareto_points)
             pp_last = pareto_points[0]
             pareto_bound = [pp_last]
             for (pp in pareto_points) {
@@ -238,7 +237,6 @@ window.dash_clientside.clientside = {
 
     plot_layout_store: function(graph_relayout_data, metric_x, metric_y, layout_store_state) {
         triggers = window.dash_clientside.callback_context.triggered.map(item => item.prop_id)
-        console.log(triggers)
         if (triggers.some(trigger => trigger.includes('x-picker')) && 'xrange' in layout_store_state) {
             delete layout_store_state['xrange']
         }
