@@ -9,15 +9,22 @@ window.dash_clientside.clientside = {
             return [{}, []]
         }
         if (per_epoch) {
-            data = this.per_epoch_figure(metric_y, runs, highlight_data, hidden_runs['per epoch'], layout_store)
+            data = this.per_epoch_figure(metric_y, runs, highlight_data, hidden_runs['per epoch'])
         } else {
-            data = this.point_figure(metric_x, metric_y, runs, do_pareto, do_pareto_right, highlight_data, hidden_runs['global'], layout_store)
+            data = this.point_figure(metric_x, metric_y, runs, do_pareto, do_pareto_right, highlight_data, hidden_runs['global'])
         }
         legendentries = data.map(item => (per_epoch) ? [item['customdata'][0]] : item['customdata'])
-        return [{'data': data, 'layout': {'xaxis': {'title': {'text': metric_x}}, 'yaxis': {'title': {'text': metric_y}}}}, legendentries]
+        layout = {'xaxis': {'title': {'text': metric_x}}, 'yaxis': {'title': {'text': metric_y}}}
+        if ('xrange' in layout_store && layout_store['xrange'] != null) {
+            layout['xaxis']['range'] = layout_store['xrange']
+        }
+        if ('yrange' in layout_store && layout_store['yrange'] != null) {
+            layout['yaxis']['range'] = layout_store['yrange']
+        }
+        return [{'data': data, 'layout': layout}, legendentries]
     },
 
-    per_epoch_figure: function(metric, runs, highlight_data, hidden_runs, layout_store) {
+    per_epoch_figure: function(metric, runs, highlight_data, hidden_runs) {
         if (runs == null) {
             return {}
         }
@@ -49,7 +56,7 @@ window.dash_clientside.clientside = {
         return data
     },
 
-    point_figure: function(metric_x, metric_y, runs, do_pareto, do_pareto_right, highlight_data, hidden_runs, layout_store){
+    point_figure: function(metric_x, metric_y, runs, do_pareto, do_pareto_right, highlight_data, hidden_runs){
         if (runs == null) {
             return {}
         }
@@ -231,6 +238,7 @@ window.dash_clientside.clientside = {
 
     plot_layout_store: function(graph_relayout_data, metric_x, metric_y, layout_store_state) {
         triggers = window.dash_clientside.callback_context.triggered.map(item => item.prop_id)
+        console.log(triggers)
         if (triggers.some(trigger => trigger.includes('x-picker')) && 'xrange' in layout_store_state) {
             delete layout_store_state['xrange']
         }
@@ -241,23 +249,26 @@ window.dash_clientside.clientside = {
         if (graph_relayout_data == null) {
             return layout_store_state
         }
-        if ('autosize' in graph_relayout_data && graph_relayout_data['autosize']) {
-            return {}
-        }
 
-        if ('xaxis.range[0]' in graph_relayout_data && graph_relayout_data['xaxis.range[0]'] != null) {
-            layout_store_state['xrange'] = [graph_relayout_data['xaxis.range[0]'], graph_relayout_data['xaxis.range[1]']]
-        }
+        if (triggers.some(trigger => trigger.includes('graph'))) {
+            if ('autosize' in graph_relayout_data && graph_relayout_data['autosize']) {
+                return {}
+            }
 
-        if ('yaxis.range[0]' in graph_relayout_data && graph_relayout_data['yaxis.range[0]'] != null) {
-            layout_store_state['yrange'] = [graph_relayout_data['yaxis.range[0]'], graph_relayout_data['yaxis.range[1]']]
-        }
+            if ('xaxis.range[0]' in graph_relayout_data && graph_relayout_data['xaxis.range[0]'] != null) {
+                layout_store_state['xrange'] = [graph_relayout_data['xaxis.range[0]'], graph_relayout_data['xaxis.range[1]']]
+            }
 
-        if ('xaxis.autorange' in graph_relayout_data && graph_relayout_data['xaxis.autorange'] && 'xrange' in layout_store_state) {
-            delete layout_store_state['xrange']
-        }
-        if ('yaxis.autorange' in graph_relayout_data && graph_relayout_data['yaxis.autorange'] && 'yrange' in layout_store_state) {
-            delete layout_store_state['yrange']
+            if ('yaxis.range[0]' in graph_relayout_data && graph_relayout_data['yaxis.range[0]'] != null) {
+                layout_store_state['yrange'] = [graph_relayout_data['yaxis.range[0]'], graph_relayout_data['yaxis.range[1]']]
+            }
+
+            if ('xaxis.autorange' in graph_relayout_data && graph_relayout_data['xaxis.autorange'] && 'xrange' in layout_store_state) {
+                delete layout_store_state['xrange']
+            }
+            if ('yaxis.autorange' in graph_relayout_data && graph_relayout_data['yaxis.autorange'] && 'yrange' in layout_store_state) {
+                delete layout_store_state['yrange']
+            }
         }
 
         return layout_store_state
