@@ -163,7 +163,9 @@ window.dash_clientside.clientside = {
         } else {
             highlight_run_data = [table_data[table_cell.row].model, table_data[table_cell.row]['run name'], table_data[table_cell.row]['run date']]
         }
+        default_styling.push({'if': {'state': 'selected'}, 'backgroundColor': 'white', 'border': '0px solid black'})
         default_styling.push({'if': {'filter_query': '{run name} = "' + highlight_run_data[1] + '" && {run date} = ' + highlight_run_data[2]}, 'backgroundColor': '#D3D3D3'})
+        default_styling.push({'if': {'state': 'selected', 'filter_query': '{run name} = "' + highlight_run_data[1] + '" && {run date} = ' + highlight_run_data[2]}, 'backgroundColor': '#D3D3D3', 'border': '0px solid black'})
         return [highlight_run_data, default_styling]
     },
 
