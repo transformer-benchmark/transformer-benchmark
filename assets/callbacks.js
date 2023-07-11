@@ -66,7 +66,7 @@ window.dash_clientside.clientside = {
         if (do_pareto_right === undefined) {
             do_pareto_right = false
         }
-        filtered_runs = runs.filter(item => item[metric_x] >= 0 && item[metric_y] >= 0)
+        filtered_runs = runs.filter(item => item[metric_x] >= 0 && item[metric_y] >= 0 && item[metric_x] != null && item[metric_y] != null)
         grouped_runs = {}
         vals = []
         for (var run in filtered_runs) {
