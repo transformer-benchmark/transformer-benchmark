@@ -22,8 +22,8 @@
         "property": "on"
       },
       {
-        "id": "pareto-side-switch",
-        "property": "value"
+        "id": "pareto-right",
+        "property": "data"
       },
       {
         "id": "overall-switch",
@@ -105,7 +105,7 @@
       }
     ],
     "long": null,
-    "output": "..pareto-side-switch.disabled...pareto-pwr-btn.disabled..",
+    "output": "pareto-pwr-btn.disabled",
     "prevent_initial_call": false,
     "state": []
   },
@@ -166,6 +166,22 @@
         "property": "data"
       }
     ]
+  },
+  {
+    "clientside_function": {
+      "function_name": "pareto_right",
+      "namespace": "clientside"
+    },
+    "inputs": [
+      {
+        "id": "x-picker",
+        "property": "value"
+      }
+    ],
+    "long": null,
+    "output": "pareto-right.data",
+    "prevent_initial_call": false,
+    "state": []
   },
   {
     "clientside_function": {

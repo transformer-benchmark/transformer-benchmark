@@ -209,7 +209,8 @@ window.dash_clientside.clientside = {
     },
 
     buttons_enabled: function(pareto_on, per_epoch) {
-        return [per_epoch || !pareto_on, per_epoch]
+        // return [per_epoch || !pareto_on, per_epoch]
+        return per_epoch
     },
 
     hidden_items_store: function(restyle_data, hidden_store_state, legend_entries, per_epoch) {
@@ -276,6 +277,10 @@ window.dash_clientside.clientside = {
 
     cookie_modal: function(clicks) {
         return clicks == null || clicks <= 0;
+    },
+
+    pareto_right: function(metric_x) {
+        return metric_x.toLowerCase().includes('throughput')
     }
 }
 
