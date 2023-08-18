@@ -281,6 +281,26 @@ window.dash_clientside.clientside = {
 
     pareto_right: function(metric_x) {
         return metric_x.toLowerCase().includes('throughput')
+    },
+
+    download_data: function(n_clicks, data) {
+        if (n_clicks == null || n_clicks < 1) {
+            return window.dash_clientside.no_update
+        }
+        keys = Object.keys(data[0])
+        keys.pop()
+        return_string = keys.join(';') + '\n'
+        for (var run in data) {
+            run = data[run]
+            run_data_list = []
+            for (var key in keys) {
+                key = keys[key]
+                run_data_list.push(run[key])
+            }
+            return_string += run_data_list.join(';') + '\n'
+        }
+
+        return {'filename': 'data.csv', 'content': return_string, 'type': 'text/csv'}
     }
 }
 
